@@ -7,6 +7,15 @@ document.addEventListener("DOMContentLoaded", () => {
     openBtn.addEventListener("click", () => {
         overlay.classList.remove("hidden");
     });
+
+    // Line Spacing Adjustment
+    const lineSpacingInput = document.getElementById("lineSpacing");
+    const lineSpacingValue = document.getElementById("lineSpacingValue");
+
+    lineSpacingInput.addEventListener("input", () => {
+        const spacing = lineSpacingInput.value;
+        lineSpacingValue.textContent = spacing;  // Display the current value of line spacing
+    });
 });
 
 // Hide the popup
@@ -20,7 +29,7 @@ function downloadPDF() {
     const filename = document.getElementById("filename").value || "document";
     const fontSize = parseInt(document.getElementById("fontSize").value);
     const font = document.getElementById("fontSelect").value;
-    const lineSpacing = parseFloat(document.getElementById("lineSpacing").value); // Get line spacing value
+    const lineSpacing = parseFloat(document.getElementById("lineSpacing").value);
 
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
@@ -38,17 +47,16 @@ function downloadPDF() {
     // Add the text to the PDF and handle page breaks automatically
     let yPosition = 10;
     for (let i = 0; i < lines.length; i++) {
-        if (yPosition > 270) { // Check if text exceeds the page
+        if (yPosition > 270) {
             doc.addPage();
-            yPosition = 10; // Reset position for next page
+            yPosition = 10;
         }
         doc.text(lines[i], 10, yPosition);
-        yPosition += lineHeight; // Adjust line spacing
+        yPosition += lineHeight;
     }
 
-    // Save the PDF
     doc.save(`${filename}.pdf`);
-    hidePopup(); // Close the popup after saving
+    hidePopup();
 }
 
 // Show PDF Preview Functionality
@@ -74,27 +82,16 @@ function showPreview() {
     // Add the text to the PDF and handle page breaks automatically
     let yPosition = 10;
     for (let i = 0; i < lines.length; i++) {
-        if (yPosition > 270) { // Check if text exceeds the page
+        if (yPosition > 270) {
             doc.addPage();
-            yPosition = 10; // Reset position for next page
+            yPosition = 10;
         }
         doc.text(lines[i], 10, yPosition);
-        yPosition += lineHeight; // Adjust line spacing
+        yPosition += lineHeight;
     }
 
     // Convert PDF to base64 for preview
     const pdfBase64 = doc.output('datauristring');
     const previewFrame = document.getElementById("pdfPreview");
-
-    // Set the iframe's src to show the PDF preview
     previewFrame.src = pdfBase64;
 }
-
-// Line Spacing Adjustment
-const lineSpacingInput = document.getElementById("lineSpacing");
-const lineSpacingValue = document.getElementById("lineSpacingValue");
-
-lineSpacingInput.addEventListener("input", () => {
-    const spacing = lineSpacingInput.value;
-    lineSpacingValue.textContent = spacing;  // Display the current value of line spacing
-});
